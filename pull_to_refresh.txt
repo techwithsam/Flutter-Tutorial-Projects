@@ -1,0 +1,318 @@
+Today we'll explore just how easy to implement pull to refresh on a flutter application using pull_to_refresh package and make use of list from the api.
+
+*** image example of refresh
+
+So let dive into our flutter project.
+First we add the pull_to_refresh package to our project
+
+Inside pubspec.yaml file Add
+dependencies:
+  pull_to_refresh: ^1.5.8
+
+For me 99% of package i use in my flutter app, i don't put version code in front, i prefer
+dependencies:
+  pull_to_refresh:
+
+There is different between this two example, which i will talk about later in my post Follow me to stay updated
+
+So we have our main.dart file
+import 'package:flutter/material.dart';
+import 'refresh.dart';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Refresh',
+      theme: ThemeData(
+        primarySwatch: Colors.teal,
+        primaryIconTheme: IconThemeData(color: Colors.white),
+      ),
+      home: RefreshPage(),
+    );
+  }
+}
+
+So let move to the page we want to refresh
+create another file let call it refresh.dart
+
+Paste this code inside the file
+
+import 'package:flutter/material.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+
+class RefreshPage extends StatefulWidget {
+  RefreshPage({Key key}) : super(key: key);
+
+  @override
+  _RefreshPageState createState() => _RefreshPageState();
+}
+
+class _RefreshPageState extends State<RefreshPage> {
+  bool _enablePullDown = true; // this enable our app to able to pull down
+  RefreshController _refreshController; // the refresh controller
+  var _scaffoldKey = GlobalKey<ScaffoldState>(); // this is our key to the scaffold widget
+
+  @override
+  void initState() {
+    _refreshController = RefreshController(); // we have to use initState because this part of the app have to restart
+    super.initState();
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      key: _scaffoldKey, // the key we create up there
+      appBar: AppBar(
+        title: Text('Pull to Refresh'),
+        centerTitle: true,
+        elevation: 0,
+      ),
+      // So inside the body widget we will implement pull to refresh, So first we call
+      body: SmartRefresher(
+        enablePullDown: _enablePullDown, // the bool we create, so this gave access to be able to pull the app down
+        header: WaterDropHeader(
+          waterDropColor: Colors.teal,
+          // complete: If the refresh is completed show this else failed
+          complete: Text('Complete',
+              style: TextStyle(
+                  color: Colors.teal,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold)), // you can customize this whatever you like
+          failed:
+              Text('Failed', style: TextStyle(color: Colors.red, fontSize: 18)),
+        ),
+        controller: _refreshController,
+        onRefresh: _onRefresh, // we are going to inplement _onRefresh and _onLoading below our build method
+        onLoading: _onLoading,
+        child: ii(), // we are going to create a list of text in this dynamic ii()
+        ),
+    );
+  } 
+txtlist() {
+    return ListView.builder(
+      itemCount: 20,
+      shrinkWrap: true,
+      itemBuilder: (context, index) {
+        return Card(
+          elevation: 10,
+          child: ListTile(
+            dense: true,
+            title: Text('Dummy Text'),
+            leading: Text('$index'),
+            subtitle: Text('push down'),
+          ),
+        );
+      },
+    );
+  } 
+}
+
+So below the txtlist paste this code
+
+_onLoading() {
+    _refreshController.loadComplete(); // after data returned,set the footer state to idle
+  }
+
+  _onRefresh() {
+    setState(() {
+      RefreshPage(); // if you want to refresh the whole page you can put the page name or
+      txtlist(); // if you only want to refresh the list you can place this, so the two can be inside setState
+       _refreshController.refreshCompleted(); // request complete,the header will enter complete state,
+      // resetFooterState : it will set the footer state from noData to idle
+    });
+  }
+
+I want to quickly show you some trick with this refresh package
+If your app depends on internet you will need this trick else you can learn it for future purpose.
+
+So inside the _onRefresh() function we want to add connectivity to it
+
+Inside pubspec.yaml file Add
+dependencies:
+  connectivity: ^0.4.8+2
+  fluttertoast:
+
+Let create another file, name it customFunc.dart or whatever name you want
+
+First we import our packages
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:connectivity/connectivity.dart';
+
+create a class call it CustomFunction
+class CustomFunction {}
+
+let call the connectivityresult, inside the CustomFunction paste this code 
+
+	Future<int> checkInternetConnection() async {
+    var result = await Connectivity().checkConnectivity();
+    if (result == ConnectivityResult.none) {
+      return 0;
+    } else if (result == ConnectivityResult.mobile) {
+      return 1;
+    } else if (result == ConnectivityResult.wifi) {
+      return 1;
+    } else {
+      return 0;
+    }
+  } // this will check though the phone internet access and see if the phone has access to internet or not
+
+  full customfunc code:
+ class CustomFunction{
+
+showToast({String message}) {
+    Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIos: 1,
+        backgroundColor: Colors.redAccent,
+        textColor: Colors.white,
+        fontSize: 20.0);
+  }
+	
+	Future<int> checkInternetConnection() async {
+    var result = await Connectivity().checkConnectivity();
+    if (result == ConnectivityResult.none) {
+      return 0;
+    } else if (result == ConnectivityResult.mobile) {
+      return 1;
+    } else if (result == ConnectivityResult.wifi) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }
+}
+
+we are done with this, let go back to the refresh file
+the _onRefresh we have to change it to chack internet access
+So delete the previous and paste this
+
+_onRefresh() {
+    setState(() {
+      Future<int> a = CustomFunction().checkInternetConnection(); // check internet access
+      a.then((value) {
+        if (value == 0) {
+          CustomFunction().showToast(message: 'No Internet Connection'); // will show a toast if there is no internet
+        } else {
+          RefreshPage();// if you want to refresh the whole page you can put the page name or
+          txtlist();// if you only want to refresh the list you can place this, so the two can be inside setState
+          _refreshController.refreshCompleted();
+          // request complete,the header will enter complete state,
+      // resetFooterState : it will set the footer state from noData to idle
+        }
+      });
+    });
+  }
+
+And we are good to go Restart your app or hot restart your app, you might need to do that several time to take effect on the app then pull the body down like you want to refresh
+
+Complete Code:
+
+import 'package:flutter/material.dart';
+import 'customFunc.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+
+class RefreshPage extends StatefulWidget {
+  RefreshPage({Key key}) : super(key: key);
+
+  @override
+  _RefreshPageState createState() => _RefreshPageState();
+}
+
+class _RefreshPageState extends State<RefreshPage> {
+  bool _enablePullDown = true; // this enable our app to able to pull down
+  RefreshController _refreshController; // the refresh controller
+  var _scaffoldKey =
+      GlobalKey<ScaffoldState>(); // this is our key to the scaffold widget
+
+  @override
+  void initState() {
+    _refreshController =
+        RefreshController(); // we have to use initState because this part of the app have to restart
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      key: _scaffoldKey, // the key we create up there
+      appBar: AppBar(
+        title: Text('Pull to Refresh'),
+        centerTitle: true,
+        elevation: 0,
+      ),
+      // So inside the body widget we will implement pull to refresh, So first we call
+      body: SmartRefresher(
+        enablePullDown:
+            _enablePullDown, // the bool we create, so this gave access to be able to pull the app down
+        header: WaterDropHeader(
+          waterDropColor: Colors.teal,
+          // complete: If the refresh is completed show this else failed
+          complete: Text('Complete',
+              style: TextStyle(
+                  color: Colors.teal,
+                  fontSize: 18,
+                  fontWeight: FontWeight
+                      .bold)), // you can customize this whatever you like
+          failed:
+              Text('Failed', style: TextStyle(color: Colors.red, fontSize: 18)),
+        ),
+        controller: _refreshController,
+        onRefresh:
+            _onRefresh, // we are going to inplement _onRefresh and _onLoading below our build method
+        onLoading: _onLoading,
+        child:
+            txtlist(), // we are going to create a list of text in this dynamic txtlist()
+      ),
+    );
+  }
+
+  txtlist() {
+    return ListView.builder(
+      itemCount: 20,
+      shrinkWrap: true,
+      itemBuilder: (context, index) {
+        return Card(
+          elevation: 10,
+          child: ListTile(
+            dense: true,
+            title: Text('Dummy Text'),
+            leading: Text('$index'),
+            subtitle: Text('push down'),
+          ),
+        );
+      },
+    );
+  }
+
+  _onLoading() {
+    _refreshController
+        .loadComplete(); // after data returned,set the footer state to idle
+  }
+
+  _onRefresh() {
+    setState(() {
+      Future<int> a =
+          CustomFunction().checkInternetConnection(); // check internet access
+      a.then((value) {
+        if (value == 0) {
+          CustomFunction().showToast(
+              message:
+                  'No Internet Connection'); // will show a toast if there is no internet
+        } else {
+          RefreshPage(); // if you want to refresh the whole page you can put the page name or
+          txtlist(); // if you only want to refresh the list you can place this, so the two can be inside setState
+          _refreshController.refreshCompleted();
+          // request complete,the header will enter complete state,
+          // resetFooterState : it will set the footer state from noData to idle
+        }
+      });
+    });
+  }
+}
+

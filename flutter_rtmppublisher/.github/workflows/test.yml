@@ -1,0 +1,57 @@
+name: Dart CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test:
+    name: Test on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        include:
+          - os: ubuntu-latest
+            flutter_path: /opt/hostedtoolcache/flutter
+          - os: macos-latest
+            flutter_path: /Users/runner/hostedtoolcache/flutter    
+    steps:
+      - run: sudo mkdir ${ANDROID_HOME}/ndk
+        if: startsWith(matrix.os,'ubuntu')
+      - name: Cache ndk
+        uses: actions/cache@v2
+        if: startsWith(matrix.os,'ubuntu')
+        with:
+          path: |
+            ${ANDROID_HOME}/ndk
+          key: ${{ runner.os }}-ndk
+      - uses: actions/checkout@v1
+      - run: ./scripts/setup-env.sh
+      - name: Cache Flutter dependencies
+        uses: actions/cache@v1
+        with:
+          path: ${{ matrix.flutter_path }}
+          key: ${{ runner.OS }}-flutter-install-cache-${{ env.FLUTTER_VERSION }}
+      - uses: actions/setup-java@v1
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+      - name: Install NDK
+        run: echo "y" | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install "ndk;20.0.5594570" --sdk_root=${ANDROID_SDK_ROOT}
+        if: startsWith(matrix.os,'ubuntu')
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: 'stable'
+      - run: dart --version
+      - run: flutter --version
+      - run: flutter pub get
+      - run: flutter test
+      - run: flutter build apk
+        if: startsWith(matrix.os,'ubuntu')
+        working-directory: example
+      - run: flutter build ios --debug --no-codesign
+        if: startsWith(matrix.os,'macOS')
+        working-directory: example

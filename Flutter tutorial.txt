@@ -1,0 +1,83 @@
+Written by Samuel Adekunle(acctgen1).
+
+Flutter Class
+**Introduction to Flutter and Dart
+
+FLUTTER
+What is Flutter? Flutter is a tool that allows you to build native cross-platform(iOS, Android) app with one programming language and codebase.
+
+NATIVE CROSS-PLATFORM - you build two real app with ONE PROGRAMMING LANGUAGE, you don't need to learn one language for android and other for iOS, you write your code once and you still get two different apps as a result.
+
+The term flutter refers to two major things:
+1. SDK - Software Development Kit: a collection of tolls that allows you to write one codebase or use one codebase with one programming language because it includes tolls to then compile this code to native machine code, and it also gives you everything you need to creat beeautiful applications.
+2. A framework/ Widget Library for that one programming language which is called Dart which you can use to build beautiful Flutter apps
+
+DART
+So Flutter uses a programming language called Dart. Dart is a programming language which is focused on building front-end(mobile apps, web) user interface (UI) front-end apps development.
+It's not limited to building mobile apps, that's just what Flutter uses it for, but Dart is independent of Flutter and you can also build web apps with Dart.
+It's a programming language which was developed by Google or is developed by Google, just like Flutter, so these are actually two independent teams in Google but of course they're working together to improve each other.
+Dart is an object oriented and strongly typed language and its syntax is abit like a mixture of JavaScript, Java, C# but you don't need to learn or know anything about any of these languages.
+
+Flutter build up on Dart, Flutter is a framework for Dart and Dart actually is the programming language which we are using, Flutter then just is a collection of tools, a set of features, utility functions and these widgets which are implemented using Dart, so that you don't have to reinvent the wheel there but you can write your own Dart code and use these exiting widgets in your code so that you don't have to again reinvent how a button should look like and work but use the pre-built button instead and then just customize it to your requirements, that s how it work. And in addition, Fluter also gives that SDK so all these tools for compiling your code in the end.
+
+
+**Understanding the Flutter Architecture
+	So now that we know what Flutter is or that we at least have a rough idea about it, let's have a look at the architecture of a Flutter application and there, the most important thing is that Flutter uses code to build user interface.
+Now let's first of all have a look at that widget thing again.
+In Flutter, everything is a widget, that's important to understand, you build your entire app in widget.
+So we have the widget tree
+You have this root widget which is your app itself, then you have different sections and in there you might have text input, text output and so on. And Widget can also hold another widget, just kind the widget tree in mind.
+
+UI as Code concept is also important, you build your UI with code not drag and drop.
+One codebase thing or concept is also important to understand.
+
+
+** How Flutter & Dart code Gets Compiled to Native Apps
+	Well your have your Dart code which uses the Flutter framework or the Flutter API as i call it here, which stands for Application Programming Interface
+(API). In the end that just means that Flutter gives you a collection of functions, of widgets, which you can use in your code to build the interface you want to build.
+Flutter simply compile that Dart code to native code for these different platforms and that happens with the use of flutter SDK and as a result you get real apps spit out with highly optimized high performance code that's based on your code but that's not your code itself, instead it's the compiled version of that code and therefore you really ship code that runs on the different platforms and that's optimized and high performance because performance is actually a huge advantage of Flutter apps.
+
+(React Native) Flutter does not use platform primitive. what does that mean? We're having our Flutter app and we're targetting iOS and Android. So flutter directly controls every pixl on the screen. So Flutter does not compile your code to some native alternatives, instead Flutter ships with its own engine which controls the entire screen, wverything the user sees and renders every pixel on its own and that gives Flutter a lot of control and a lot of flexibility.
+
+
+
+** Flutter Versions
+	Flutter is relatively new, its been around for a couple of years but especially over the last year(2018 - 2019), it got a lot of traction and it's really pushed by google now therefore Flutter versions are changing frequently.
+
+** Flutter Installation
+** Flutter Alternatives - React Native and Ionic
+
+Flutter: uses Dart + Flutter, Compiled Native Apps, Does NOT compile to iOS/Android UI Components, Cross-platform(mobile apps, web apps, desktop apps), Developed by Google.
+
+React Native: uses JavaScript/React.js, Partly compiled (UI components) Native Apps, Does compile to iOS/Android UI Components, Mostly mobile apps(+ React Native Web) Developed by Facebook.
+
+Ionic: JavaScript(any or no Framework), WebView-hosted Web Apps, Does NOT compile to iOS / Android UI components, Cross-platform (mobile apps, web apps, desktop apps) Developed by Ionic.
+
+** Course Structure
+- Getting Started
+- Basics
+- Debugging
+- More Widgets, Styling, App Logic
+- Responsive & Adaptive UIs
+- Widget & Flutter Internals
+- Navigation & Multiple Screens
+- State Management
+- User Input & Forms
+- Sending Http Requests
+- User Authentivation
+- Animations
+- Using Device Features (Camera, Maps, ...)
+- Running Native Device Code
+- Publishing an App
+- Roundup & "How to Develop Great Apps"
+
+** Getting the Most Out of the Course
+ Code Along & Do the Exercises
+ Use the Course Resources
+ Ask question
+ Help others
+
+
+
+
+

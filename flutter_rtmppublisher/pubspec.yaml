@@ -1,0 +1,31 @@
+name: camera_with_rtmp
+description: Controlling the camera on Android and iOS plus rtmp live streaming support. Based off the Camera plugin.
+version: 0.2.3
+homepage: https://github.com/pinkfish/flutter_rtmppublisher
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+  flutter: ">=1.10.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  path_provider: ^1.6.9
+  video_player: 0.10.0+8
+  flutter_test:
+    sdk: flutter
+  flutter_driver:
+    sdk: flutter
+  pedantic: ^1.8.0+1
+
+# The following section is specific to Flutter.
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: com.whelksoft.camera_with_rtmp
+        pluginClass: RtmppublisherPlugin
+      ios:
+        pluginClass: RtmppublisherPlugin
