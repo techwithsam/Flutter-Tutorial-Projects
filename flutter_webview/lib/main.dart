@@ -1,22 +1,21 @@
 import 'package:flutter/material.dart';
-import 'web.dart';
+import 'package:flutter_webview/page.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Google', // change this to your company description
+      title: 'Google',
       theme: ThemeData(
         primaryColor: Colors.blue,
       ),
       debugShowCheckedModeBanner: false,
-      home: WebView(
-        title: "Google", // change this to your company name
-        selectedUrl: "https://google.com/", // change the url to your desire url
-      ),
+      home: HomePage(),
     );
   }
 }
-

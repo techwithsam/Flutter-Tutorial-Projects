@@ -1,11 +1,7 @@
-// this is the webview code
-
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 
 class WebView extends StatefulWidget {
-  // so here we're taking the url and title from our main.dart page
-  // so we can pass it to the webview page
   final String title;
   final String selectedUrl;
   WebView({
