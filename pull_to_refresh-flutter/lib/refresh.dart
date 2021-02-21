@@ -1,9 +1,7 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_pull_to_refresh/customFunc.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'nextpage.dart';
 
 class RefreshPage extends StatefulWidget {
   @override
@@ -74,8 +72,7 @@ class _RefreshPageState extends State<RefreshPage> {
             trailing: IconButton(
               icon: Icon(Icons.arrow_forward),
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => NextPage()));
+               
               },
             ),
           ),

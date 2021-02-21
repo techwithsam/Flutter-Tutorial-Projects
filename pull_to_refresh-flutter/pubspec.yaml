@@ -23,15 +23,17 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
-  pull_to_refresh: any
-  connectivity: any
-  fluttertoast: any
+  pull_to_refresh: 
+  connectivity: 
+  fluttertoast: 
+  flutter_paystack:
+  google_fonts:
+  http:
+  #video_player:
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-    # https://medium.com/@samuelbeebest/how-to-use-pull-to-refresh-in-flutter-d2a73df540df?sk=12d6d0ba29f4c0bf46c7e73fcb713a4f
-    # https://medium.com/@samuelbeebest/how-to-use-pull-to-refresh-in-flutter-d2a73df540df
 
 
 # For information on the generic Dart part of this file, see the
